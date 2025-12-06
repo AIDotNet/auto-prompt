@@ -906,22 +906,22 @@ public class PromptService(IDbContext dbContext, ILogger<PromptService> logger) 
     {
         if (model.StartsWith("gpt-4.1"))
         {
-            return 128000;
+            return 32000;
         }
 
         if (model.StartsWith("o"))
         {
-            return 100000; // OpenAI模型通常支持更高的Token限制
+            return 32000; // OpenAI模型通常支持更高的Token限制
         }
 
         if (model.StartsWith("claude"))
         {
-            return 100000; // Claude模型通常支持更高的Token限制
+            return 32000; // Claude模型通常支持更高的Token限制
         }
 
         if (model.StartsWith("gemini"))
         {
-            return 100000; // Gemini模型通常支持更高的Token限制
+            return 32000; // Gemini模型通常支持更高的Token限制
         }
 
         if (model.Equals("Qwen3-235B-A22B", StringComparison.OrdinalIgnoreCase))
