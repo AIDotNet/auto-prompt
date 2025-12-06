@@ -33,24 +33,33 @@ public class ConsoleOptions
     public static async Task Initialize(IConfiguration configuration)
     {
         OpenAIEndpoint = configuration["OpenAIEndpoint"] ??
+                         Environment.GetEnvironmentVariable("OpenAIEndpoint") ??
                          throw new ArgumentNullException("请配置环境变量：OpenAIEndpoint 示例：https://api.openai.com/v1");
 
-        ChatModel = configuration.GetSection("CHAT_MODEL").Get<string>()?.Split(',') ??
+        var chatModelStr = configuration.GetSection("CHAT_MODEL").Get<string>() ??
+                           Environment.GetEnvironmentVariable("CHAT_MODEL");
+        ChatModel = chatModelStr?.Split(',') ??
                     throw new ArgumentNullException("请配置环境变量：ChatModel 示例：gpt-4.1-mini,gpt-3.5-turbo");
 
-        ImageGenerationModel = configuration.GetSection("IMAGE_GENERATION_MODEL").Get<string>()?.Split(',') ??
+        var imageModelStr = configuration.GetSection("IMAGE_GENERATION_MODEL").Get<string>() ??
+                            Environment.GetEnvironmentVariable("IMAGE_GENERATION_MODEL");
+        ImageGenerationModel = imageModelStr?.Split(',') ??
                                throw new ArgumentNullException("请配置环境变量：IMAGE_GENERATION_MODEL 示例：dall-e-3,midjourney");
 
-        DefaultChatModel = configuration["DEFAULT_CHAT_MODEL"] ?? "gpt-4.1-mini";
+        DefaultChatModel = configuration["DEFAULT_CHAT_MODEL"] ??
+                          Environment.GetEnvironmentVariable("DEFAULT_CHAT_MODEL") ??
+                          "gpt-4.1-mini";
 
-        DefaultImageGenerationModel = configuration["DEFAULT_IMAGE_GENERATION_MODEL"] ?? "o4-mini";
+        DefaultImageGenerationModel = configuration["DEFAULT_IMAGE_GENERATION_MODEL"] ??
+                                      Environment.GetEnvironmentVariable("DEFAULT_IMAGE_GENERATION_MODEL") ??
+                                      "o4-mini";
 
-        ScoreModel = configuration["SCORE_MODEL"] ?? "gpt-4.1";
+        ScoreModel = configuration["SCORE_MODEL"] ??
+                     Environment.GetEnvironmentVariable("SCORE_MODEL") ??
+                     "gpt-4.1";
 
-        if (!string.IsNullOrWhiteSpace(configuration["API_KEY"]))
-        {
-            DefaultAPIKey = configuration["API_KEY"];
-        }
+        DefaultAPIKey = configuration["API_KEY"] ??
+                        Environment.GetEnvironmentVariable("API_KEY");
 
         // 如果DefaultAPIKey和OpenAIEndpoint都配置了则自动获取模型列表
         if (!string.IsNullOrEmpty(DefaultAPIKey) && !string.IsNullOrEmpty(OpenAIEndpoint) &&

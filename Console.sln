@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		README.zh-CN.md = README.zh-CN.md
 		docker-compose.yaml = docker-compose.yaml
+		docker-compose-ollama.yaml = docker-compose-ollama.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console.Core", "src\Console.Core\Console.Core.csproj", "{6C983DDC-6331-4A29-A1B3-0289C9827DE9}"

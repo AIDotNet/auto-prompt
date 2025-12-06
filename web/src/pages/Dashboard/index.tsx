@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Button, 
   Input, 
@@ -698,7 +698,7 @@ const DashboardPage: React.FC = () => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
 
   // 加载分享的提示词列表
-  const loadSharedPrompts = async (page = 1, search = searchText, sort = sortBy, order = sortOrder) => {
+  const loadSharedPrompts = useCallback(async (page: number, search: string, sort: string, order: string) => {
     setLoading(true);
     try {
       const input: SharedPromptTemplateSearchInput = {
@@ -727,12 +727,12 @@ const DashboardPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.pageSize, t]);
 
   // 初始化加载
   useEffect(() => {
-    loadSharedPrompts();
-  }, []);
+    loadSharedPrompts(1, '', 'ViewCount', 'desc');
+  }, [loadSharedPrompts]);
 
   // 搜索处理
   const handleSearch = (value: string) => {
@@ -753,6 +753,11 @@ const DashboardPage: React.FC = () => {
     setSortOrder(newSortOrder);
     setPagination(prev => ({ ...prev, current: 1 }));
     loadSharedPrompts(1, searchText, sortBy, newSortOrder);
+  };
+
+  // 视图模式切换处理
+  const handleViewModeChange = (value: string | number) => {
+    setViewMode(value as ViewMode);
   };
 
   // 分页处理
@@ -1198,7 +1203,7 @@ const DashboardPage: React.FC = () => {
         <div className="sort-section">
           <Segmented
             value={viewMode}
-            onChange={setViewMode}
+            onChange={handleViewModeChange}
             options={[
               { 
                 label: (
